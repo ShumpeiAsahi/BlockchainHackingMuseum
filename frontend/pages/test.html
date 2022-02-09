@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Faucet Demo</title>
+ <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body>
+ <p>Faucet</p>
+ <button type=“button” onclick="doFunction();">gettoken</button>
+ <script type="text/javascript">
+
+  // メタマスクに接続する
+  async function loadWeb3(){
+   if(window.ethereum) {
+    window.web3 = new Web3(window.ethereum);
+    window.ethereum.enable();
+   }
+  }
+
+  // コントラクトに接続する
+  async function loadContract(){
+   return await new window.web3.eth.Contract([
+    {
+     "inputs": [],
+     "name": "send",
+     "outputs": [],
+     "stateMutability": "nonpayable",
+     "type": "function"
+    },
+    {
+     "inputs": [
+      {
+       "internalType": "uint256",
+       "name": "_amount",
+       "type": "uint256"
+      }
+     ],
+     "name": "setFaucetDripAmount",
+     "outputs": [],
+     "stateMutability": "nonpayable",
+     "type": "function"
+    },
+    {
+     "inputs": [
+      {
+       "internalType": "address",
+       "name": "_tokenAddr",
+       "type": "address"
+      }
+     ],
+     "name": "setTokenAddress",
+     "outputs": [],
+     "stateMutability": "nonpayable",
+     "type": "function"
+    },
+    {
+     "inputs": [
+      {
+       "internalType": "address",
+       "name": "_mbtAddress",
+       "type": "address"
+      },
+      {
+       "internalType": "address",
+       "name": "_ownerAddress",
+       "type": "address"
+      }
+     ],
+     "stateMutability": "nonpayable",
+     "type": "constructor"
+    },
+    {
+     "inputs": [
+      {
+       "internalType": "address",
+       "name": "_receiver",
+       "type": "address"
+      },
+      {
+       "internalType": "uint256",
+       "name": "_amount",
+       "type": "uint256"
+      }
+     ],
+     "name": "withdrawTokens",
+     "outputs": [],
+     "stateMutability": "nonpayable",
+     "type": "function"
+    }
+   ],'0xb586592Bf648e54d420dD57EfF861932D5E9A915');
+  }
+
+  // 利用者のメタマスクのウォレットアドレスを取得
+  async function getCurrentAccount(){
+   const accounts = await window.web3.eth.getAccounts();
+   return accounts[0];
+  }
+
+  // ボタンがクリックされたときに、Faucetのコントラクトを実行する
+  async function doFunction() {
+   const account = await getCurrentAccount(); // 利用者のメタマスクのウォレットアドレスを取得
+   const send = await window.contract.methods.send().send({ from: account });
+   console.log(send);
+  }
+
+  // メタマスクとコントラクトへの接続を実行する機能
+  async function load(){
+   await loadWeb3(); // メタマスクに接続する
+   window.contract = await loadContract(); // コントラクトに接続する
+  }
+  load(); // メタマスクとコントラクトへの接続を実行する機能を実行する
+
+ </script>
+</body>
+</html>

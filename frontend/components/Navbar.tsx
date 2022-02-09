@@ -56,6 +56,11 @@ export const Navbar = () => {
                 Home
               </a>
             </Link>
+            <Link href='/faucet'>
+              <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-orange-600 hover:text-white'>
+                トークンを受け取る
+              </a>
+            </Link>
             <Link href='/experience_home'>
               <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-orange-600 hover:text-white'>
                 体験する
@@ -63,12 +68,7 @@ export const Navbar = () => {
             </Link>
             <Link href='/'>
               <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-orange-600 hover:text-white'>
-                メニュー1
-              </a>
-            </Link>
-            <Link href='/'>
-              <a className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-orange-600 hover:text-white'>
-                Contact us
+                Contact
               </a>
             </Link>
           </div>

@@ -9,39 +9,6 @@ import { Footer } from '../components/Footer';
 
 const Home: NextPage = () => {
 
-  const [wallet,setWalletAddress] = useState(null)
-  
-  const connectWallet = async () => {
-    // Check if MetaMask is installed on user's browser
-    if(window.ethereum) {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const chainId = await window.ethereum.request({ method: 'eth_chainId'});
-      // Check if user is connected to Ropsten
-      if(chainId != '0x3') {
-        alert("Please connect to Ropsten");
-      }else{
-        let wallet = accounts[0];
-        setWalletAddress(wallet);
-      }
-    } else {
-      alert("Please install Mask");
-    }
-    return wallet;
-  }
-
-  const sendToken = async () => {
-    const Web3 = require('web3');
-    const web3 = new Web3(window.ethereum);
-    await window.ethereum.enable();
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    let wallet = accounts[0];
-    const contract_abi = require('../../abi/BHM_Fauset_abi');
-    const contract_address = '0xc2C89adDd9e7549BB1711f845B1A8948fdD74241';
-    const Faucet = new web3.eth.Contract(contract_abi, contract_address);
-    //const MintContract = new web3.eth.Contract(contract_abi, contract_address);
-    await Faucet.methods.send().send({from:wallet});
-  }
-
   return (
     <div>
       <Head>
@@ -52,15 +19,13 @@ const Home: NextPage = () => {
       <Navbar />
 
       <main className={styles.main}>
-        <h1 className="text-3xl font-bold underline">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+        <h1 className="text-3xl font-bold">
+          BlockChain Hacking Museum
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
+          あなたのトークン、盗みます。
         </p>
-        <button onClick={sendToken}>BHMトークンを受け取る</button>
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
